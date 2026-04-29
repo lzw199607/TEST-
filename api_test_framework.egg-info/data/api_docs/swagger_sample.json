@@ -1,0 +1,386 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "用户管理 API",
+    "version": "1.0.0",
+    "description": "用户管理系统的 RESTful API 接口文档"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "开发环境"
+    }
+  ],
+  "security": [
+    { "bearerAuth": [] }
+  ],
+  "tags": [
+    { "name": "认证", "description": "用户认证相关接口" },
+    { "name": "用户管理", "description": "用户 CRUD 接口" },
+    { "name": "订单", "description": "订单管理接口" }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["认证"],
+        "summary": "用户登录",
+        "description": "通过用户名和密码登录，返回 JWT Token",
+        "operationId": "login",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": { "type": "string", "description": "用户名", "example": "admin" },
+                  "password": { "type": "string", "description": "密码", "example": "admin123" }
+                }
+              },
+              "example": { "username": "admin", "password": "admin123" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" },
+                "example": {
+                  "code": 0,
+                  "message": "success",
+                  "data": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "user": { "id": 1, "username": "admin", "nickname": "管理员" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "用户名或密码错误" }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["认证"],
+        "summary": "用户注册",
+        "description": "注册新用户",
+        "operationId": "register",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password", "email"],
+                "properties": {
+                  "username": { "type": "string", "minLength": 3, "maxLength": 20, "description": "用户名" },
+                  "password": { "type": "string", "minLength": 6, "maxLength": 32, "description": "密码" },
+                  "email": { "type": "string", "format": "email", "description": "邮箱" },
+                  "nickname": { "type": "string", "description": "昵称" }
+                }
+              },
+              "example": { "username": "newuser", "password": "123456", "email": "new@example.com" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "example": { "code": 0, "message": "注册成功", "data": { "id": 2, "username": "newuser" } }
+              }
+            }
+          },
+          "400": { "description": "参数校验失败" },
+          "409": { "description": "用户名已存在" }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["用户管理"],
+        "summary": "获取用户列表",
+        "description": "分页获取用户列表",
+        "operationId": "listUsers",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 }, "description": "页码" },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10, "maximum": 100 }, "description": "每页数量" },
+          { "name": "keyword", "in": "query", "schema": { "type": "string" }, "description": "搜索关键词" },
+          { "name": "status", "in": "query", "schema": { "type": "string", "enum": ["active", "disabled"] }, "description": "用户状态" }
+        ],
+        "responses": {
+          "200": {
+            "description": "用户列表",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "total": 50,
+                    "page": 1,
+                    "size": 10,
+                    "items": [
+                      { "id": 1, "username": "admin", "nickname": "管理员", "email": "admin@example.com", "status": "active", "created_at": "2026-01-01 00:00:00" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "创建用户",
+        "description": "创建新用户（管理员权限）",
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password", "role"],
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "nickname": { "type": "string" },
+                  "role": { "type": "string", "enum": ["admin", "user", "guest"] }
+                }
+              },
+              "example": { "username": "testuser", "password": "123456", "role": "user" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "example": { "code": 0, "data": { "id": 3, "username": "testuser" } }
+              }
+            }
+          },
+          "400": { "description": "参数校验失败" },
+          "403": { "description": "无权限" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["用户管理"],
+        "summary": "获取用户详情",
+        "description": "根据 ID 获取用户详细信息",
+        "operationId": "getUser",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "用户 ID" }
+        ],
+        "responses": {
+          "200": {
+            "description": "用户详情",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 0,
+                  "data": { "id": 1, "username": "admin", "nickname": "管理员", "email": "admin@example.com", "role": "admin", "status": "active", "created_at": "2026-01-01 00:00:00" }
+                }
+              }
+            }
+          },
+          "404": { "description": "用户不存在" }
+        }
+      },
+      "put": {
+        "tags": ["用户管理"],
+        "summary": "更新用户信息",
+        "description": "更新指定用户的信息",
+        "operationId": "updateUser",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "用户 ID" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "status": { "type": "string", "enum": ["active", "disabled"] }
+                }
+              },
+              "example": { "nickname": "新昵称", "email": "new@example.com" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "example": { "code": 0, "message": "更新成功" }
+              }
+            }
+          },
+          "404": { "description": "用户不存在" }
+        }
+      },
+      "delete": {
+        "tags": ["用户管理"],
+        "summary": "删除用户",
+        "description": "删除指定用户",
+        "operationId": "deleteUser",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "用户 ID" }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功",
+            "content": {
+              "application/json": {
+                "example": { "code": 0, "message": "删除成功" }
+              }
+            }
+          },
+          "404": { "description": "用户不存在" }
+        }
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "tags": ["订单"],
+        "summary": "获取订单列表",
+        "description": "分页获取当前用户的订单",
+        "operationId": "listOrders",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } },
+          { "name": "status", "in": "query", "schema": { "type": "string", "enum": ["pending", "paid", "shipped", "completed", "cancelled"] } }
+        ],
+        "responses": {
+          "200": {
+            "description": "订单列表",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "total": 5,
+                    "items": [
+                      { "id": "ORD001", "amount": 99.9, "status": "paid", "created_at": "2026-04-28 10:00:00" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["订单"],
+        "summary": "创建订单",
+        "description": "创建新订单",
+        "operationId": "createOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["items"],
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["product_id", "quantity"],
+                      "properties": {
+                        "product_id": { "type": "integer" },
+                        "quantity": { "type": "integer", "minimum": 1 },
+                        "price": { "type": "number" }
+                      }
+                    }
+                  },
+                  "coupon_code": { "type": "string", "description": "优惠券码" },
+                  "remark": { "type": "string", "description": "备注" }
+                }
+              },
+              "example": {
+                "items": [{ "product_id": 1, "quantity": 2, "price": 49.95 }],
+                "remark": "请尽快发货"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "order_id": "ORD002",
+                    "total_amount": 99.9,
+                    "status": "pending"
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "参数错误" }
+        }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "tags": ["订单"],
+        "summary": "获取订单详情",
+        "operationId": "getOrder",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" }, "description": "订单 ID" }
+        ],
+        "responses": {
+          "200": {
+            "description": "订单详情",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 0,
+                  "data": {
+                    "id": "ORD001",
+                    "amount": 99.9,
+                    "status": "paid",
+                    "items": [{ "product_id": 1, "product_name": "测试商品", "quantity": 2, "price": 49.95 }],
+                    "shipping_address": "北京市朝阳区xxx",
+                    "created_at": "2026-04-28 10:00:00"
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "订单不存在" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

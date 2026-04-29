@@ -1,0 +1,6 @@
+username,password,expected_code,expected_message
+admin,admin123,0,success
+admin,wrongpass,401,密码错误
+,admin123,401,用户名不能为空
+admin,,401,密码不能为空
+notexist,123456,401,用户名或密码错误

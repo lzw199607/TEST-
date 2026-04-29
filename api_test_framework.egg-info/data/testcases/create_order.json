@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "name": "正常下单",
+      "items": [{"product_id": 1, "quantity": 2, "price": 49.95}],
+      "remark": "请尽快发货",
+      "expected_code": 0,
+      "expected_status": "pending"
+    },
+    {
+      "name": "空商品列表",
+      "items": [],
+      "remark": "",
+      "expected_code": 400
+    },
+    {
+      "name": "商品数量为0",
+      "items": [{"product_id": 1, "quantity": 0, "price": 49.95}],
+      "remark": "",
+      "expected_code": 400
+    },
+    {
+      "name": "负数价格",
+      "items": [{"product_id": 1, "quantity": 1, "price": -10}],
+      "remark": "",
+      "expected_code": 400
+    }
+  ]
+}
