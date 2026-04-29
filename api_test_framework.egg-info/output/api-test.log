@@ -1,0 +1,25 @@
+2026-04-29 19:39:33,562 [[32mINFO    [0m] api-test - 开始解析文档: swagger_sample.json (格式: openapi)
+2026-04-29 19:39:33,567 [[32mINFO    [0m] api-test - 解析 OpenAPI 文档: swagger_sample.json (版本: 3.0.3)
+2026-04-29 19:39:33,567 [[32mINFO    [0m] api-test - 从 OpenAPI 文档中提取了 10 个接口
+2026-04-29 19:39:37,287 [[32mINFO    [0m] api-test - 开始解析文档: swagger_sample.json (格式: openapi)
+2026-04-29 19:39:37,288 [[32mINFO    [0m] api-test - 解析 OpenAPI 文档: swagger_sample.json (版本: 3.0.3)
+2026-04-29 19:39:37,288 [[32mINFO    [0m] api-test - 从 OpenAPI 文档中提取了 10 个接口
+2026-04-29 19:39:37,288 [[32mINFO    [0m] api-test - 共从 1 个文件中提取了 10 个接口
+2026-04-29 19:39:37,294 [[32mINFO    [0m] api-test - 使用模板生成测试用例（10 个接口）
+2026-04-29 19:39:37,295 [[32mINFO    [0m] api-test - 模板生成: test_认证_api.py (2 个接口)
+2026-04-29 19:39:37,295 [[32mINFO    [0m] api-test - 模板生成: test_用户管理_api.py (5 个接口)
+2026-04-29 19:39:37,295 [[32mINFO    [0m] api-test - 模板生成: test_订单_api.py (3 个接口)
+2026-04-29 19:39:37,296 [[32mINFO    [0m] api-test - 生成测试文件: output\testcases\test_认证_api.py
+2026-04-29 19:39:37,296 [[32mINFO    [0m] api-test - 生成测试文件: output\testcases\test_用户管理_api.py
+2026-04-29 19:39:37,297 [[32mINFO    [0m] api-test - 生成测试文件: output\testcases\test_订单_api.py
+2026-04-29 19:40:10,920 [[32mINFO    [0m] api-test - 开始解析文档: swagger_sample.json (格式: openapi)
+2026-04-29 19:40:10,922 [[32mINFO    [0m] api-test - 解析 OpenAPI 文档: swagger_sample.json (版本: 3.0.3)
+2026-04-29 19:40:10,922 [[32mINFO    [0m] api-test - 从 OpenAPI 文档中提取了 10 个接口
+2026-04-29 19:40:10,922 [[32mINFO    [0m] api-test - 共从 1 个文件中提取了 10 个接口
+2026-04-29 19:40:10,926 [[32mINFO    [0m] api-test - 使用模板生成测试用例（10 个接口）
+2026-04-29 19:40:10,926 [[32mINFO    [0m] api-test - 模板生成: test_认证_api.py (2 个接口)
+2026-04-29 19:40:10,926 [[32mINFO    [0m] api-test - 模板生成: test_用户管理_api.py (5 个接口)
+2026-04-29 19:40:10,927 [[32mINFO    [0m] api-test - 模板生成: test_订单_api.py (3 个接口)
+2026-04-29 19:40:10,927 [[32mINFO    [0m] api-test - 生成测试文件: output\testcases\test_认证_api.py
+2026-04-29 19:40:10,928 [[32mINFO    [0m] api-test - 生成测试文件: output\testcases\test_用户管理_api.py
+2026-04-29 19:40:10,928 [[32mINFO    [0m] api-test - 生成测试文件: output\testcases\test_订单_api.py
