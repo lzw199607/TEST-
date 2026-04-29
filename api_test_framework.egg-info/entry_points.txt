@@ -1,0 +1,2 @@
+[console_scripts]
+api-test = cli:cli
