@@ -1,0 +1,9 @@
+api:
+  base_url: "https://staging-api.example.com"
+  auth:
+    type: "bearer"
+    login_url: "/api/auth/login"
+    username: "staging_admin"
+    password: "staging_pass"
+    token_path: "$.data.token"
+    refresh_url: "/api/auth/refresh"

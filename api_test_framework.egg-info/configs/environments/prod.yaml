@@ -1,0 +1,9 @@
+api:
+  base_url: "https://api.example.com"
+  auth:
+    type: "bearer"
+    login_url: "/api/auth/login"
+    username: ""          # 生产环境请通过环境变量 LLM_API_KEY 设置
+    password: ""
+    token_path: "$.data.token"
+    refresh_url: "/api/auth/refresh"

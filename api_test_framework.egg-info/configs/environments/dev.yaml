@@ -1,0 +1,9 @@
+api:
+  base_url: "http://localhost:8080"
+  auth:
+    type: "bearer"
+    login_url: "/api/auth/login"
+    username: "admin"
+    password: "admin123"
+    token_path: "$.data.token"
+    refresh_url: "/api/auth/refresh"
